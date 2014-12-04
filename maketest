@@ -127,6 +127,18 @@ else
     EMAIL="#$ -M ${EMAIL}"
 fi
 
+#Defines the grid script which executes the submitted file
+echo "#!/bin/sh
+#$ -wd $dir
+${EMAIL}
+#$ -m ${EMAIL_CODE}
+
+echo 'Starting Job'
+${RUN_CMD}$file ${ARGUMENTS}
+echo 'End Job'" > "${NAME}.sh"
+
+chmod +x "${NAME}.sh"
+
 job_list=""
 
 #Submit the jobs!
