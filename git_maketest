@@ -177,6 +177,7 @@ if [ -n GIT_ENABLED ]; then
 				fi
 			fi
 		fi
+		GIT_DATA="$(git log -l --pretty=%H:%B)"
 	fi
 fi
 
@@ -201,7 +202,7 @@ if [ -z "${RUN_CMD}" ]; then
 fi
 
 #Copy everthing to new test directory
-mkdir $dir
+mkdir -p $dir
 cp "$BASE_FILE" "$dir"
 cd $dir
 
@@ -216,9 +217,8 @@ fi
 
 job_list=""
 
-if [ -z GIT_ENABLED ]; then
-	GIT_DATA="$(git log -l --pretty=%b)"
-	echo "${GIT_DATA}" > last_git_commit.log
+if [ -n GIT_DATA ]; then
+	echo "The last commit: ${GIT_DATA}" > last_git_commit.log
 fi
 
 mkdir scripts

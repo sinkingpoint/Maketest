@@ -106,6 +106,9 @@ case "$file" in
   *.jar)
     RUN_CMD="java -jar "
   ;;
+  *.py)
+    RUN_CMD="python "
+  ;;
   *.sh|*)
     RUN_CMD="./"
   ;;
