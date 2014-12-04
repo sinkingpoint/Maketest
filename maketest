@@ -61,6 +61,9 @@ do
 		      e (When the job ends) 
 		      a (If the job is aborted)
 		      n (No notifications (default))"
+      echo "Format Arguments: "
+      echo "The '--args' argument accepts the following values which will be generated on the fly: "
+      echo "    %n - The number of the trial"
       echo "-h|--help Show this help message"
       exit 0
   esac
@@ -126,6 +129,17 @@ if [ -z "${EMAIL}" ]; then
 else
     EMAIL="#$ -M ${EMAIL}"
 fi
+chmod +x "${NAME}.sh"
+
+job_list=""
+
+mkdir scripts
+
+#Submit the jobs!
+for i in `seq ${NUM}`
+do
+
+$currargs = "${ARGUMENTS//%n/$i}"
 
 #Defines the grid script which executes the submitted file
 echo "#!/bin/sh
@@ -134,19 +148,12 @@ ${EMAIL}
 #$ -m ${EMAIL_CODE}
 
 echo 'Starting Job'
-${RUN_CMD}$file ${ARGUMENTS}
-echo 'End Job'" > "${NAME}.sh"
+${RUN_CMD}$file $currargs
+echo 'End Job'" > "scripts/${NAME}$i.sh"
 
-chmod +x "${NAME}.sh"
-
-job_list=""
-
-#Submit the jobs!
-for i in `seq ${NUM}`
-do
  name="${NAME}$i"
  job_list="$name,$job_list"
- qsub -N $name "${NAME}.sh" > /dev/null
+ qsub -N $name "scripts/${NAME}$i.sh" > /dev/null
 done
 
 #Strip last comma from job_list
