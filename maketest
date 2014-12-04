@@ -129,7 +129,6 @@ if [ -z "${EMAIL}" ]; then
 else
     EMAIL="#$ -M ${EMAIL}"
 fi
-chmod +x "${NAME}.sh"
 
 job_list=""
 
@@ -139,8 +138,6 @@ mkdir scripts
 for i in `seq ${NUM}`
 do
 
-$currargs = "${ARGUMENTS//%n/$i}"
-
 #Defines the grid script which executes the submitted file
 echo "#!/bin/sh
 #$ -wd $dir
@@ -148,8 +145,10 @@ ${EMAIL}
 #$ -m ${EMAIL_CODE}
 
 echo 'Starting Job'
-${RUN_CMD}$file $currargs
+${RUN_CMD}$file ${ARGUMENTS//'%n'/$i}
 echo 'End Job'" > "scripts/${NAME}$i.sh"
+
+chmod +x "scripts/${NAME}$i.sh"
 
  name="${NAME}$i"
  job_list="$name,$job_list"
