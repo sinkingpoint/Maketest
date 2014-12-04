@@ -217,7 +217,7 @@ fi
 job_list=""
 
 if [ -z GIT_ENABLED ]; then
-	GIT_DATA="$(git log -l --pretty=%b")"
+	GIT_DATA="$(git log -l --pretty=%b)"
 	echo "${GIT_DATA}" > last_git_commit.log
 fi
 
